@@ -244,3 +244,79 @@ body{
   border:2px solid var(--yellow);background:#fff7df;
 }
 .donate-people{font-size:0.75rem;color:var(--gray);}
+
+/* ====================================================================
+   RESPONSIVE LAYOUT
+   Mobile (default, matches phone wireframe): single narrow column,
+   goal banner stacked above the puzzle grid, 3-wide level select grid.
+   Desktop/laptop (matches pc/laptop wireframe): wider canvas, goal
+   panel sits beside the puzzle grid, 5-wide level select grid.
+==================================================================== */
+.game-content{
+  display:flex;
+  flex-direction:column;
+}
+
+@media (min-width: 900px){
+  body{ padding:40px; }
+
+  .device{
+    width:880px;
+    min-height:640px;
+  }
+  .screen{
+    height:640px;
+    padding:28px 36px;
+  }
+
+  /* Start screen becomes a two-column hero like the laptop wireframe */
+  #screen-start{
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+  }
+  #screen-start .topbar{
+    position:absolute;
+    top:28px;left:36px;right:36px;
+  }
+  .start-mid{
+    text-align:left;
+    margin-top:0;
+    width:46%;
+  }
+  .start-title{ font-size:3.2rem; }
+  .btn{ width:auto; min-width:160px; display:inline-block; margin-right:10px; }
+  .start-art{
+    width:48%;
+    height:320px;
+    margin-top:0;
+  }
+
+  /* Level select: wider grid, more columns, like the laptop wireframe */
+  .level-grid{
+    grid-template-columns:repeat(5, 1fr);
+    gap:16px;
+  }
+
+  /* Gameplay: goal panel sits beside the grid, not above it */
+  .game-content{
+    flex-direction:row;
+    align-items:flex-start;
+    gap:20px;
+  }
+  .goal-banner{
+    flex:0 0 220px;
+    margin-bottom:0;
+    text-align:left;
+    padding:18px;
+  }
+  .grid-wrap{
+    flex:1;
+  }
+  .grid{
+    margin:0;
+  }
+  .tray-row{
+    max-width:520px;
+  }
+}
