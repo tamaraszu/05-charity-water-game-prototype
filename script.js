@@ -76,7 +76,7 @@ function buildLevels() {
       fixed,
       slots,
       timeLimit: 60 + i * 5,
-      reward: 100,
+      reward: 10,
     });
   }
   return lv;
@@ -228,16 +228,20 @@ function handleSlotClick(div) {
     div.classList.add('filled', 'correct');
     div.onclick = null;
     state.filledCount++;
-    state.score += 10;
-    document.getElementById('score-start').textContent = state.score;
-    document.getElementById('score-levels').textContent = state.score;
-    showToast('+10 points! Nice connection.', 'good');
+    showToast('Nice connection!', 'good');
     checkLevelComplete();
   } else {
     div.classList.add('wrong');
-    showToast("That pipe doesn't fit there!", 'bad');
+    state.score = Math.max(0, state.score - 5);
+    updateScoreDisplays();
+    showToast("That pipe doesn't fit there! -5 points", 'bad');
     setTimeout(() => div.classList.remove('wrong'), 350);
   }
+}
+
+function updateScoreDisplays() {
+  document.getElementById('score-start').textContent = state.score;
+  document.getElementById('score-levels').textContent = state.score;
 }
 
 function showToast(msg, type) {
@@ -275,6 +279,12 @@ function pauseGame() {
   setTimeout(() => { startTimer(); }, 1600);
 }
 
+function resetLevel() {
+  if (!state.currentLevel) return;
+  showToast('Level reset', 'good');
+  startLevel(state.currentLevel.id);
+}
+
 function checkLevelComplete() {
   const lv = state.currentLevel;
   const totalSlots = Object.keys(lv.slots).length;
@@ -286,6 +296,7 @@ function checkLevelComplete() {
     else if (timeUsed < lv.timeLimit * 0.8) stars = 2;
     state.stars[lv.id] = Math.max(state.stars[lv.id] || 0, stars);
     state.score += lv.reward;
+    updateScoreDisplays();
     if (lv.id + 1 > state.unlocked && lv.id < 10) state.unlocked = lv.id + 1;
     saveState();
     showComplete(lv, stars);
